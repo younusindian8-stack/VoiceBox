@@ -1,43 +1,28 @@
-*{box-sizing:border-box}
-body{margin:0;background:#f5f6fb;color:#24243b;font-family:Inter,system-ui,-apple-system,Arial,sans-serif}
-button,input,select{font:inherit}
-button{cursor:pointer}
-.voicebox{max-width:1120px;margin:auto;padding:24px}
-.vb-header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.vb-brand{display:flex;align-items:center;gap:11px;font-size:25px;font-weight:800}
-.vb-logo{display:grid;place-items:center;background:#5d50e8;color:white;width:42px;height:42px;border-radius:13px}
-.vb-tag,.vb-heading span{font-size:13px;color:#77798d}
-.vb-nav{display:flex;gap:8px;margin:24px 0}
-.vb-nav button{border:0;background:transparent;padding:11px 17px;border-radius:10px;color:#606177}
-.vb-nav button.selected{background:#e9e6ff;color:#5043d0;font-weight:700}
-.vb-hero{position:relative;overflow:hidden;background:linear-gradient(120deg,#25204e,#6355ed);color:white;border-radius:23px;padding:34px}
-.vb-eyebrow{font-size:12px;letter-spacing:1.5px;color:#d9d4ff;font-weight:700}
-.vb-hero h1{font-size:clamp(34px,5vw,50px);line-height:1.08;margin:18px 0 12px}
-.vb-hero p{color:#e1ddff;max-width:440px;line-height:1.6}
-.vb-primary,.vb-secondary{border:0;border-radius:11px;padding:12px 17px;font-weight:700}
-.vb-primary{background:#5d50e8;color:white}
-.vb-hero .vb-primary{background:white;color:#5043ce;margin-top:8px}
-.vb-orb{position:absolute;right:9%;top:24%;font-size:clamp(60px,10vw,105px);filter:drop-shadow(0 10px 20px #17123b55)}
-.vb-heading{display:flex;align-items:center;justify-content:space-between;margin:28px 0 14px}
-.vb-heading h2{font-size:21px;margin:0}
-.vb-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.vb-card,.vb-panel{background:white;border:1px solid #e8e8f1;border-radius:18px;padding:21px}
-.vb-icon{display:grid;place-items:center;width:55px;height:55px;background:#f0efff;border-radius:15px;font-size:28px}
-.vb-card h3{margin:17px 0 7px;font-size:17px}
-.vb-card p,.vb-panel p{color:#77798d;font-size:14px;line-height:1.6}
-.vb-secondary{background:#efedff;color:#5144d2}
-.vb-panel{max-width:760px;margin:12px auto;padding:clamp(20px,4vw,34px)}
-.vb-panel h1{margin-top:0;font-size:clamp(26px,4vw,36px)}
-.vb-empty,.vb-upload{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;background:#faf9ff;border:2px dashed #d3cffc;border-radius:16px;padding:28px 16px;margin:22px 0}
-.vb-empty{font-size:36px}
-.vb-empty h3{font-size:19px;margin:4px}
-.vb-empty p{font-size:14px}
-.vb-upload span{font-size:40px}
-.vb-upload input{max-width:100%;margin:8px}
-.vb-upload small,.vb-note{font-size:13px;color:#77798d}
-.vb-panel label{display:block;margin:18px 0;font-weight:600}
-.vb-panel select{display:block;width:100%;padding:12px;border:1px solid #dedfeb;border-radius:10px;margin-top:8px;background:white}
-.vb-note{background:#f4f2ff;border-radius:10px;padding:13px}
-.vb-message{background:#eeedff;border-radius:10px;padding:12px}
-.vb-footer{margin:28px 0 8px;font-size:11px;letter-spacing:1px;color:#9293a5}
-@media(max-width:650px){.voicebox{padding:16px 14px 28px}.vb-header{align-items:flex-start}.vb-tag{width:100%}.vb-nav{overflow:auto;margin:18px 0}.vb-nav button{padding:10px 12px;white-space:nowrap}.vb-hero{padding:25px 22px}.vb-orb{right:6%;top:12%;font-size:47px;opacity:.75}.vb-hero h1{font-size:35px;max-width:75%}.vb-hero p{max-width:90%}.vb-cards{grid-template-columns:1fr}.vb-card{padding:17px}.vb-panel{padding:21px 17px}}
+* { box-sizing: border-box; }
+:root { font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; color: #172b3b; background: #f3f7fb; }
+body { margin: 0; }
+button, input, select { font: inherit; }
+.voicebox { max-width: 900px; min-height: 100vh; margin: auto; padding: 20px; }
+.vb-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.vb-logo { font-size: 25px; font-weight: 800; color: #176b66; }
+.vb-header p, .vb-panel p, .vb-hero p { color: #657587; line-height: 1.65; }
+.vb-nav { display: flex; gap: 8px; margin: 20px 0; padding: 6px; border-radius: 15px; background: white; box-shadow: 0 4px 18px #16324a0c; }
+.vb-nav button { flex: 1; border: 0; border-radius: 10px; padding: 12px 5px; background: transparent; color: #526476; cursor: pointer; }
+.vb-nav button.active { background: #176b66; color: white; }
+.vb-hero, .vb-panel { background: white; border: 1px solid #e5edf2; border-radius: 22px; padding: clamp(20px, 5vw, 42px); box-shadow: 0 10px 35px #16324a0a; }
+.vb-tag { display: inline-block; background: #e1f5ef; color: #176b66; border-radius: 20px; padding: 8px 12px; font-size: 13px; font-weight: 700; }
+h1 { font-size: clamp(27px, 6vw, 44px); line-height: 1.15; margin: 20px 0 10px; }
+.vb-primary { border: 0; border-radius: 12px; padding: 13px 18px; background: #176b66; color: white; font-weight: 700; cursor: pointer; margin-top: 10px; }
+.vb-features { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 35px; }
+.vb-features article { background: #f5f8fa; border-radius: 15px; padding: 16px; }
+.vb-features article span { font-size: 27px; }
+.vb-features h3 { margin: 12px 0 5px; }
+.vb-features p { font-size: 14px; margin-bottom: 0; }
+.vb-panel { margin-top: 12px; }
+.vb-upload { display: block; border: 2px dashed #a9c9c5; background: #f5fbfa; border-radius: 15px; padding: 24px 14px; text-align: center; margin: 20px 0; cursor: pointer; }
+.vb-upload input { display: block; width: 100%; margin-top: 15px; }
+.vb-panel label:not(.vb-upload) { display: block; margin: 18px 0; font-weight: 600; }
+.vb-panel select { display: block; width: 100%; padding: 12px; margin-top: 8px; border: 1px solid #d7e1e7; border-radius: 10px; background: white; }
+.vb-note, .vb-message { margin-top: 16px; padding: 12px; background: #f0f5f7; border-radius: 10px; overflow-wrap: anywhere; }
+.vb-footer { text-align: center; color: #82909c; font-size: 12px; padding: 25px 0; }
+@media (max-width: 520px) { .voicebox { padding: 12px; } .vb-header { align-items: flex-start; flex-direction: column; gap: 2px; } .vb-header p { margin-top: 0; } .vb-nav { gap: 3px; } .vb-nav button { font-size: 13px; } .vb-features { grid-template-columns: 1fr; } .vb-features article { display: grid; grid-template-columns: 38px 1fr; column-gap: 10px; } .vb-features article span { grid-row: span 2; } .vb-features h3 { margin: 0; } }

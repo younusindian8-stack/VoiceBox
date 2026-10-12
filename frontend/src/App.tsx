@@ -1,70 +1,96 @@
 import { useState } from "react";
 import "./App.css";
 
-const items = [
-  { icon: "▶️", title: "Explore videos", desc: "Watch and discover media" },
-  { icon: "📚", title: "Your library", desc: "Keep your media together" },
-  { icon: "🌐", title: "Language dubbing", desc: "Understand media in your language" },
-];
+type Page = "Home" | "Library" | "Upload" | "Dubbing";
 
 export default function App() {
-  const [page, setPage] = useState("Home");
-  const [file, setFile] = useState("");
+  const [page, setPage] = useState<Page>("Home");
+  const [file, setFile] = useState<File | null>(null);
   const [message, setMessage] = useState("");
+
+  async function upload() {
+    if (!file) {
+      setMessage("पहले अपने डिवाइस से फ़ाइल चुनें।");
+      return;
+    }
+    const data = new FormData();
+    data.append("file", file);
+    setMessage("फ़ाइल अपलोड हो रही है...");
+    try {
+      const response = await fetch("/api/uploads", { method: "POST", body: data });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.detail || "अपलोड असफल हुआ।");
+      setMessage("अपलोड सफल: " + result.filename);
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "अपलोड असफल हुआ।");
+    }
+  }
 
   return (
     <main className="voicebox">
       <header className="vb-header">
-        <div className="vb-brand"><span className="vb-logo">V</span><span>VoiceBox</span></div>
-        <span className="vb-tag">Media without language barriers</span>
+        <div className="vb-logo">▶ VoiceBox</div>
+        <p>हर आवाज़, हर भाषा</p>
       </header>
-
       <nav className="vb-nav">
-        {["Home", "Library", "Upload", "Dubbing"].map(n =>
-          <button key={n} className={page === n ? "selected" : ""} onClick={() => {setPage(n); setMessage("");}}>{n}</button>
-        )}
+        {(["Home", "Library", "Upload", "Dubbing"] as Page[]).map((item) => (
+          <button key={item} className={page === item ? "active" : ""} onClick={() => { setPage(item); setMessage(""); }}>
+            {{Home:"होम", Library:"लाइब्रेरी", Upload:"अपलोड", Dubbing:"डबिंग"}[item]}
+          </button>
+        ))}
       </nav>
 
-      {page === "Home" && <>
+      {page === "Home" && (
         <section className="vb-hero">
-          <span className="vb-eyebrow">WELCOME TO VOICEBOX</span>
-          <h1>Every voice.<br/>Every language.</h1>
-          <p>Discover videos, audio and documents in one simple place.</p>
-          <button className="vb-primary" onClick={() => setPage("Library")}>Explore library →</button>
-          <div className="vb-orb">🎧</div>
+          <span className="vb-tag">आपका मीडिया, आपकी भाषा</span>
+          <h1>देखें, सुनें और समझें।</h1>
+          <p>वीडियो, ऑडियो, PDF और तस्वीरों के लिए एक जगह।</p>
+          <button className="vb-primary" onClick={() => setPage("Upload")}>अपना मीडिया जोड़ें →</button>
+          <div className="vb-features">
+            <article><span>🎬</span><h3>वीडियो</h3><p>अपने वीडियो व्यवस्थित करें।</p></article>
+            <article><span>📚</span><h3>लाइब्रेरी</h3><p>अपनी मीडिया फ़ाइलों की जगह।</p></article>
+            <article><span>🌐</span><h3>भाषा डबिंग</h3><p>भविष्य के भाषा टूल का प्रवेश।</p></article>
+          </div>
         </section>
-        <div className="vb-heading"><h2>Explore VoiceBox</h2><span>Made for everyone</span></div>
-        <section className="vb-cards">
-          {items.map(i => <article className="vb-card" key={i.title}>
-            <div className="vb-icon">{i.icon}</div><h3>{i.title}</h3><p>{i.desc}</p>
-            <button className="vb-secondary" onClick={() => setPage(i.title === "Your library" ? "Library" : i.title === "Language dubbing" ? "Dubbing" : "Library")}>Open</button>
-          </article>)}
+      )}
+
+      {page === "Library" && (
+        <section className="vb-panel">
+          <h1>आपकी लाइब्रेरी</h1>
+          <p>अपलोड की गई फ़ाइलों को यहाँ दिखाने के लिए स्थायी लाइब्रेरी और डेटाबेस जोड़ना अगला चरण है।</p>
+          <button className="vb-primary" onClick={() => setPage("Upload")}>फ़ाइल अपलोड करें</button>
         </section>
-      </>}
+      )}
 
-      {page === "Library" && <section className="vb-panel">
-        <h1>Your media library</h1><p>Videos, audio, PDFs and images will appear here.</p>
-        <div className="vb-empty">📂<h3>Your library starts here</h3><p>Upload media to begin. Real file storage is not connected yet.</p><button className="vb-primary" onClick={() => setPage("Upload")}>＋ Choose media</button></div>
-      </section>}
+      {page === "Upload" && (
+        <section className="vb-panel">
+          <h1>अपना मीडिया अपलोड करें</h1>
+          <p>अपने फ़ोन या कंप्यूटर से वीडियो, ऑडियो, PDF या तस्वीर चुनें।</p>
+          <label className="vb-upload">
+            <span>＋ फ़ाइल चुनने के लिए यहाँ दबाएँ</span>
+            <input type="file" accept="video/*,audio/*,application/pdf,image/*" onChange={(event) => { setFile(event.target.files?.[0] ?? null); setMessage(""); }} />
+          </label>
+          {file && <p>चुनी गई फ़ाइल: <strong>{file.name}</strong></p>}
+          <button className="vb-primary" onClick={upload}>अपलोड करें</button>
+          <p className="vb-note">अपलोड के लिए बैकएंड सर्वर चालू होना चाहिए।</p>
+          {message && <p className="vb-message">{message}</p>}
+        </section>
+      )}
 
-      {page === "Upload" && <section className="vb-panel">
-        <h1>Upload your media</h1><p>Choose a video, audio file, PDF or image from your device.</p>
-        <label className="vb-upload"><span>☁️</span><strong>Choose a file</strong><input type="file" accept="video/*,audio/*,application/pdf,image/*" onChange={e => {setFile(e.target.files?.[0]?.name || "");setMessage("");}}/><small>{file || "Video · Audio · PDF · Images"}</small></label>
-        <p className="vb-note">This preview can select a file, but server upload and permanent storage are not connected yet.</p>
-        <button className="vb-primary" onClick={() => setMessage(file ? "File selected. Actual upload will be enabled when storage is connected." : "Please choose a file first.")}>Continue</button>
-        {message && <p className="vb-message">{message}</p>}
-      </section>}
-
-      {page === "Dubbing" && <section className="vb-panel">
-        <h1>Language dubbing</h1><p>Make media easier to understand.</p>
-        <label>Original language<select><option>Auto detect (planned)</option><option>English</option><option>Hindi</option><option>Urdu</option></select></label>
-        <label>Target language<select><option>Hindi</option><option>English</option><option>Urdu</option></select></label>
-        <p className="vb-note">Speech recognition, translation and voice dubbing still need to be connected.</p>
-        <button className="vb-primary" onClick={() => setMessage("The dubbing engine is not connected yet.")}>Prepare dubbing</button>
-        {message && <p className="vb-message">{message}</p>}
-      </section>}
-
-      <footer className="vb-footer">VOICEBOX · EARLY BUILD</footer>
+      {page === "Dubbing" && (
+        <section className="vb-panel">
+          <h1>भाषा डबिंग</h1>
+          <p>अपनी पसंद की भाषा में मीडिया समझने की सुविधा।</p>
+          <label>मूल भाषा
+            <select><option>अपने आप पहचानें</option><option>हिंदी</option><option>English</option><option>اردو</option></select>
+          </label>
+          <label>लक्ष्य भाषा
+            <select><option>हिंदी</option><option>English</option><option>اردو</option></select>
+          </label>
+          <p className="vb-note">वास्तविक ट्रांसक्रिप्शन और आवाज़ में डबिंग इंजन अभी कनेक्ट नहीं है।</p>
+        </section>
+      )}
+      <footer className="vb-footer">VOICEBOX · शुरुआती संस्करण</footer>
     </main>
   );
 }
