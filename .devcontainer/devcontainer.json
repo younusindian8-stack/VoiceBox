@@ -1,0 +1,4 @@
+{
+  "name": "VoiceBox",
+  "postStartCommand": "bash /workspaces/VoiceBox/.devcontainer/start-backend.sh"
+}
